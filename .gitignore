@@ -18,6 +18,9 @@ pycache/
 Ignore environment variables file
 .env
 
+Ignore migrations
+migrations
+
 Ignore logs
 *.log
 
@@ -25,7 +28,7 @@ Ignore database files
 *.db
 
 Ignore static and media files
-static/
+
 media/
 
 Ignore generated files
@@ -35,7 +38,6 @@ Ignore generated files
 
 Ignore package directories
 dist/
-build/
 *.egg-info/
 
 Ignore temporary files
