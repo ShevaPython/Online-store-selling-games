@@ -2,21 +2,20 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>{% block title %}Base html{% endblock  %}</title>
+    <title>{% block title %}Base html{% endblock %}</title>
     <!-- Stylesheets -->
     <link href="{{ url_for('static', filename='css/bootstrap.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/responsive.css') }}" rel="stylesheet">
 
-    <link rel="shortcut icon" href="images/favicon.png" type="image/x-icon">
-    <link rel="icon" href="images/favicon.png" type="image/x-icon">
+    <link rel="shortcut icon" href="#{{ url_for('static',filename="images/favicon.png")}}" type="image/x-icon">
+    <link rel="icon" href="{{ url_for('static',filename="images/favicon.png")}}" type="image/x-icon">
 
     <!-- Responsive -->
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <!--[if lt IE 9]>
+
     <script src="{{ url_for('static',filename="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js") }}"></script><![endif]-->
-    <!--[if lt IE 9]>
     <script src="{{ url_for('static',filename="js/respond.js") }}"></script><![endif]-->
 </head>
 
@@ -57,7 +56,7 @@
                 <div class="auto-container clearfix">
                     <!--Logo-->
                     <div class="logo-outer">
-                        <div class="logo"><a href="index.html"><img src="images/logo.png" alt=""
+                        <div class="logo"><a href="#"><img src="{{ url_for('static',filename="images/logo.png")}}" alt=""
                                                                     title="Gamon - Digital Gaming and Esports HTML Template"></a>
                         </div>
                     </div>
@@ -74,23 +73,23 @@
                                     <li class="current dropdown"><a href="{{ url_for('index') }}">Home</a>
 
                                     </li>
-                                    <li class="dropdown"><a href="about-clan.html">Games</a>
+                                    <li class="dropdown"><a href="#">Games</a>
                                         <ul>
-                                            <li><a href="about-clan.html">About Clan</a></li>
-                                            <li><a href="about-me.html">About Me</a></li>
-                                            <li><a href="players.html">Players</a></li>
-                                            <li><a href="faq.html">Faq's</a></li>
+                                            <li><a href="#">All game</a></li>
+                                            <li><a href="#">MMo_RpG</a></li>
+                                            <li><a href="#">Action</a></li>
+                                            <li><a href="#">Strategy</a></li>
                                         </ul>
                                     </li>
-                                    <li><a href="gallery.html">About me</a></li>
+                                    <li><a href="#">About me</a></li>
                                 </ul>
 
                                 <ul class="navigation pull-right clearfix">
-                                    <li class="dropdown"><a href="matches.html">Game store</a>
+                                    <li class="dropdown"><a href="#">Contacts</a>
 
                                     </li>
-                                    <li><a href="contact.html">Contacts</a></li>
-                                    <li class="dropdown"><a href="blog.html">Card</a></li>
+                                    <li><a href="#">Card</a></li>
+                                    <li class="dropdown"><a href="#">Regestration</a></li>
 
                                 </ul>
                             </div>
@@ -107,7 +106,7 @@
             <div class="auto-container clearfix">
                 <!--Logo-->
                 <div class="logo pull-left">
-                    <a href="index.html" title=""><img src="images/logo.png" alt="" title=""></a>
+                    <a href="#" title=""><img src="{{url_for('static',filename="images/logo.png")}}" alt="" title=""></a>
                 </div>
                 <!--Right Col-->
                 <div class="pull-right">
@@ -125,7 +124,7 @@
             <div class="close-btn"><span class="icon flaticon-close"></span></div>
 
             <nav class="menu-box">
-                <div class="nav-logo"><a href="index.html"><img src="images/logo.png" alt="" title=""></a></div>
+                <div class="nav-logo"><a href="#"><img src="{{ url_for('static',filename="images/logo.png")}}" alt="" title=""></a></div>
                 <div class="menu-outer">
                     <!--Here Menu Will Come Automatically Via Javascript / Same Menu as in Header--></div>
                 <!--Social Links-->
@@ -154,7 +153,7 @@
                     <div class="column col-lg-4 col-md-6 col-sm-12">
                         <div class="footer-widget logo-widget">
                             <div class="logo">
-                                <a href="index.html"><img src="images/logo.png" alt=""/></a>
+                                <a href="#"><img src="{{url_for('static',filename="images/logo.png")}}" alt=""/></a>
                             </div>
                             <div class="text">There are many variations of passages of lorem ipsum available, but the
                                 majority have suffered alteration in some form by injected.
@@ -243,16 +242,16 @@
 </div>
 <!--End pagewrapper-->
 
-<script src="{{ url_for('static',filename="js/jquery.js")}}"></script>
-<script src="{{ url_for('static',filename="js/popper.min.js")}}"></script>
-<script src="{{ url_for('static',filename="js/bootstrap.min.js")}}"></script>
-<script src="{{ url_for('static',filename="js/jquery-ui.js")}}"></script>
-<script src="{{ url_for('static',filename="js/jquery.fancybox.js")}}"></script>
-<script src="{{ url_for('static',filename="js/owl.js")}}"></script>
-<script src="{{ url_for('static',filename="js/appear.js")}}"></script>
-<script src="{{ url_for('static',filename="js/wow.js")}}"></script>
-<script src="{{ url_for('static',filename="js/scrollbar.js")}}"></script>
-<script src="{{ url_for('static',filename="js/script.js")}}"></script>
+<script src="{{ url_for('static',filename="js/jquery.js") }}"></script>
+<script src="{{ url_for('static',filename="js/popper.min.js") }}"></script>
+<script src="{{ url_for('static',filename="js/bootstrap.min.js") }}"></script>
+<script src="{{ url_for('static',filename="js/jquery-ui.js") }}"></script>
+<script src="{{ url_for('static',filename="js/jquery.fancybox.js") }}"></script>
+<script src="{{ url_for('static',filename="js/owl.js") }}"></script>
+<script src="{{ url_for('static',filename="js/appear.js") }}"></script>
+<script src="{{ url_for('static',filename="js/wow.js") }}"></script>
+<script src="{{ url_for('static',filename="js/scrollbar.js") }}"></script>
+<script src="{{ url_for('static',filename="js/script.js") }}"></script>
 
 </body>
 
