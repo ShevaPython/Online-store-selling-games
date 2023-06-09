@@ -20,5 +20,5 @@ def base():
 
 @app.route('/all_game')
 def all_game_page():
-    games= Game.query.all()
-    return render_template('shop/show_all_games.html', games=games)
+    all_games= Game.query.all()
+    return render_template('shop/show_all_games.html', all_games=all_games)

@@ -8,7 +8,6 @@ class Developer(db.Model):
     name = db.Column(db.String(45), nullable=False)
     description = db.Column(db.String(400), nullable=False)
     developer_site = db.Column(db.String(45), nullable=False)
-
     # Отношение один-ко-многим с таблицей Games
     games = db.relationship('Game', backref='developer', lazy=True)
 
@@ -92,6 +91,8 @@ class Cart(db.Model):
 
     # Обратная ссылка на заказ
     order = db.relationship('Order', backref='cart')
+
+
 
 
 @manager.user_loader
