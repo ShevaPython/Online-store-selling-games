@@ -1,5 +1,8 @@
 from flask_login import UserMixin
-from app_shop import db, app, manager
+from app_shop import db, manager
+
+
+# Ваш код моделей
 
 
 class Developer(db.Model):
@@ -93,18 +96,15 @@ class Cart(db.Model):
     order = db.relationship('Order', backref='cart')
 
 
-
-
 @manager.user_loader
 def load_user(user_id):
-    return User.guery.get(user_id)
+    return User.query.get(user_id)
 
 
-def drop_tables():
-    with app.app_context():
-        db.drop_all()
+#
+# def drop_tables():
+#     with app.app_context():
+#         db.drop_all()
+#
+#
 
-
-def create_tables():
-    with app.app_context():
-        db.create_all()
