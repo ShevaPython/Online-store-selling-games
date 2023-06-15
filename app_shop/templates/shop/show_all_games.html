@@ -1,46 +1,63 @@
 {% extends 'base.html' %}
 
 {% block title %}All games{% endblock %}
+{% block menu_genres %}
+    <li class="dropdown"><a href="#">Genres</a>
+        <ul>
+            {% for ganr in genres %}
+                <li><a href="">{{ ganr.name }}</a></li>
+            {% endfor %}
 
+        </ul>
+    </li>
+{% endblock %}
 {% block content %}
-    <section class="page-banner" style="background-image:url(images/background/title-bg.jpg);">
+    <section class="page-banner"
+             style="background-image:url({{ url_for('static',filename='images/background/title-bg.jpg') }});">
         <div class="auto-container">
             <div class="inner-container clearfix">
-                <ul class="bread-crumb clearfix">
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="index.html">Pages</a></li>
-                    <li>About Me</li>
-                </ul>
-                <h1>About Me</h1>
+
+                <h1 style="color: blue;">All games</h1>
             </div>
         </div>
     </section>
     <!--End Page Title-->
 
-{%for game in all_games%}
+    {% for game in all_games %}
 
-	<section class="player-info-section">
-		<div class="auto-container">
-			<div class="row clearfix">
-            	<!--Text Column-->
-                <div class="text-column col-lg-6 col-md-6 col-sm-12">
-                	<div class="inner wow fadeInRight">
-                    	<div class="title-box">
-                        	<div class="user-title">{{ game.name }}</div>
-                            <div class="user-info">Price :: {{ game.price }}</div>
+        <section class="player-info-section">
+            <div class="auto-container">
+                <div class="row clearfix">
+                    <!--Text Column-->
+                    <div class="text-column col-lg-6 col-md-6 col-sm-12">
+                        <div class="inner wow fadeInRight">
+                            <div class="title-box">
+                                <div class="user-title">{{ game.name }}</div>
+                                <div class="user-info">Price :: {{ game.price }}</div>
+                            </div>
+                            <div class="text">There are many variations of passages of lorem ipsum available, but the
+                                majority have suffered alteration in some form, by injected humour, or simply free
+                                textinh randomised words which don't look even slightly believable. If you are going to
+                                use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing
+                                hidden in the middle of text.
+                            </div>
                         </div>
-                        <div class="text">There are many variations of passages of lorem ipsum available, but the majority have suffered alteration in some form, by injected humour, or simply free textinh randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text.</div>
                     </div>
-                </div>
-                <!--Image Column-->
-                <div class="image-column col-lg-6 col-md-6 col-sm-12">
-                	<div class="inner wow fadeInLeft">
-                    	<figure class="image"><img src="{{ url_for('static',filename="images/resource/about-4.jpg")}}" alt=""></figure>
+                    <!--Image Column-->
+                    <div class="image-column col-lg-6 col-md-6 col-sm-12">
+                        <div class="inner wow fadeInLeft">
+                            <figure class="image"><img
+                                    {% if game.photo %}
+                                        src="{{ game.photo }}" alt="">
+                                    {% else %}
+                                        src="{{ game.photo }}" alt="">
+                                    {% endif %}
+                            </figure>
+                        </div>
                     </div>
                 </div>
             </div>
-		</div>
-	</section>
-{%endfor%}
-{%endblock %}
+        </section>
+    {% endfor %}
+{% endblock %}
 	

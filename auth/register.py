@@ -1,7 +1,7 @@
 from flask import (
-    Blueprint, flash, redirect, render_template, request, session, url_for
+    Blueprint, flash, redirect, render_template, request, url_for
 )
-from flask_login import login_user, login_required, logout_user
+from flask_login import login_user, login_required, logout_user, current_user
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from app_shop import db
@@ -44,6 +44,8 @@ def register_page():
 
 @auth_bp.route('/login', methods=('GET', 'POST'))
 def login_page():
+    if current_user.is_authenticated:
+        return redirect('basket.html')
     login = request.form.get("login")
     password = request.form.get("password")
     if request.method == 'POST':
@@ -53,7 +55,7 @@ def login_page():
             if user and check_password_hash(user.password, password):
                 login_user(user)
                 next_page = request.args.get('next')
-                return redirect(next_page or url_for('index'))
+                return redirect(next_page or url_for('index_page'))
             else:
                 flash('Login or password are incorrect')
         else:
@@ -64,6 +66,6 @@ def login_page():
 
 @auth_bp.route("/logout")
 @login_required
-def logout():
+def logout_page():
     logout_user()
-    return redirect(url_for('index'))
+    return redirect(url_for('index_page'))

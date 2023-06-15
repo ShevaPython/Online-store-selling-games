@@ -70,11 +70,6 @@ class User(db.Model, UserMixin):
             raise NotImplementedError("No `id` attribute - override `get_id`") from None
 
 
-class Status(db.Model):
-    __tablename__ = 'status'
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(45), nullable=False)
-
 
 class Order(db.Model):
     __tablename__ = 'order'
@@ -82,7 +77,7 @@ class Order(db.Model):
     order_date = db.Column(db.Date, nullable=False)
     total_price = db.Column(db.Integer, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    status_id = db.Column(db.Integer, db.ForeignKey('status.id'))
+
 
 
 class Cart(db.Model):
