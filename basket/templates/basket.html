@@ -1,11 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>{% block title %}Registration{% endblock %}</title>
+    <title>{% block title %}Basket{% endblock %}</title>
+    <link rel="shortcut icon" href="#{{ url_for('static',filename='images/favicon.png') }}" type="image/x-icon">
+    <link rel="icon" href="{{ url_for('static',filename='images/favicon.png') }}" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="{{ url_for('.static', filename='css/style.css') }}">
+
 </head>
 <body>
-{% block nav %}
+
+
+<div class="container">
     <div class="header_nav">
 
         <div class="nav_links">
@@ -19,50 +24,111 @@
 
         </div>
     </div>
-{% endblock %}
- <div class="container">
-        <div class="card">
-            <h2>Card</h2>
-        </div>
 
+    <div class="card">
+        <h2>Card</h2>
+    </div>
+    {% for cart_item in cart_items %}
         <table class="table">
+
             <thead>
-                <tr>
-                    <th>Photo</th>
-                    <th>Name</th>
-                    <th>Price</th>
-                    <th>Description</th>
-                    <th></th>
-                </tr>
+            <tr>
+                <th>Photo</th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Description</th>
+                <th></th>
+            </tr>
             </thead>
             <tbody>
-            {% for game in games %}
-                <tr>
-                    <td><img src="{{ game.photo }}" alt="Product 1"></td>
-                    <td>{{ game.name}}</td>
-                    <td>{{game.price}}₴</td>
-                    <td>Lorem ipsum dolor sit amet, consectetur adipiscing elitasdasdasdasdasdasdasd
-                        asdasdasdasdasdasdasda
-                        asdasdasdasdasdasdasdasd
-                        asdasdasdasdasdasdas
-                        asdasdasdasdasd
-                        asdasdasdasdasdasdada.</td>
-                    <td><button class="delete-button">Delete</button></td>
 
-                </tr>
+            <tr>
+                <td><img src="{{ cart_item.game.photo }}" alt="Product 1"></td>
+                <td>{{ cart_item.game.name }}</td>
+                <td>{{ cart_item.game.price }}₴</td>
+                <td>{{ cart_item.game.id }}
 
-            {% endfor %}
+                </td>
+                <td>
+                    <button  class="delete-button" data-game-id="{{ cart_item.game.id }}">Delete
+                    </button>
 
-                <!-- Добавьте другие товары здесь -->
+                </td>
+
+            </tr>
+
+
+            <!-- Добавьте другие товары здесь -->
             </tbody>
+
         </table>
-     <div class="total-section">
-            <h3>Total Price: <span class="total-price">29.98₴</span></h3>
-            <button class="payment-button">Оплатить</button>
-        </div>
+    {% endfor %}
+    <div class="total-section">
+        <h3>Total Price: <span class="total-price">{{ total_price }}</span></h3>
+        <button id="payment-button" class="payment-button">Оплатить</button>
+        <div id="message-section" style="color: red"></div>
+
+
     </div>
+</div>
 
 <div class=""></div>
 
 </body>
 </html>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#payment-button').click(function () {
+            console.log('asdasdasdasdasd')
+            $.ajax({
+                url: '/basket/pay_basket',
+                type: 'POST',
+                dataType: 'json',
+                success: function (response) {
+                    showMessage(response.message);
+                },
+                error: function () {
+                    showMessage('Payment failed');
+                }
+            });
+        });
+
+        function showMessage(message) {
+            $('#message-section').text(message);
+        }
+    });
+
+
+
+</script>
+<script>
+    $(document).ready(function () {
+        $('.delete-button').click(function () {
+            var gameId = $(this).data('game-id');
+
+            $.ajax({
+                url: '/basket/delete_game',
+                type: 'POST',
+                data: { 'game-id': gameId },
+                dataType: 'json',
+                success: function (response) {
+                    showMessage(response.message);
+                    // Optionally, you can remove the deleted game row from the table
+                    $(this).closest('tr').remove();
+                     location.reload(); // Обновить страницу
+                },
+                error: function () {
+                    showMessage('Failed to delete the game from the cart');
+                    location.reload(); // Обновить страницу
+
+                }
+            });
+        });
+
+        function showMessage(message) {
+            $('#message-section').text(message);
+        }
+    });
+</script>

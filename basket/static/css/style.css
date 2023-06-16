@@ -1,6 +1,7 @@
 body {
     font-family: Arial, sans-serif;
     background-image: url("../images/1.jpeg");
+    background-attachment: fixed;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -25,6 +26,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-around;
+
 }
 
 .nav_links {
@@ -67,9 +69,10 @@ body {
 
 .container {
     max-width: 800px;
-    margin: 0 auto;
+    margin:  auto;
     padding: 10px;
     color: white;
+    max-height: 700px;
 }
 
 .card {
@@ -92,7 +95,7 @@ body {
 }
 
 .table th {
-    background-color: #252323;
+    background-color: #0e1010;
 }
 
 table img {

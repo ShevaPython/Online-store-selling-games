@@ -18,13 +18,13 @@ migrate = Migrate(app, db)
 manager = LoginManager(app)
 
 from auth.register import auth_bp
-from basket.basket import card_bp
+from basket.basket import cart_bp
 from app_shop.routes import *
 
 # Регистрация Blueprint для авторизации
 app.register_blueprint(auth_bp, url_prefix='/auth')
 # Регистрация Blueprint для basket
-app.register_blueprint(card_bp, url_prefix='/basket')
+app.register_blueprint(cart_bp, url_prefix='/basket')
 
 
 with app.app_context():

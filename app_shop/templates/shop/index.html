@@ -13,6 +13,12 @@
         </ul>
     </li>
 {% endblock %}
+
+{% block card_count %}
+    <li><a href="{{ url_for('basket.index_basket') }}">Basket
+        : {{ cart_count }}</a></li>
+{% endblock card_count %}
+
 {% block content %}
 
     <!-- Banner Section -->

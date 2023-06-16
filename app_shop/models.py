@@ -1,4 +1,8 @@
 from flask_login import UserMixin
+from datetime import date, datetime
+
+from sqlalchemy import ForeignKeyConstraint
+
 from app_shop import db, manager
 
 
@@ -58,10 +62,15 @@ class User(db.Model, UserMixin):
     login = db.Column(db.String(255), unique=True)
     email = db.Column(db.String(255), unique=True)
     password = db.Column(db.String(255))
-    is_admin = db.Column(db.Boolean(), default=True)
-    confirmed_at = db.Column(db.DateTime())
+    is_admin = db.Column(db.Boolean(), default=False)
+    confirmed_at = db.Column(db.DateTime, default=datetime.utcnow)
     # Отношение один-ко-многим с таблицей Orders
     orders = db.relationship('Order', backref='user', lazy=True)
+    # Отношение один-ко-многим с таблицей Cart
+    cart = db.relationship('Cart', backref='user', lazy=True, cascade='all, delete, delete-orphan')
+    balance = db.Column(db.Float,default=None)
+
+    # Отношение один-ко-многим с таблицей Cart
 
     def get_id(self):
         try:
@@ -70,13 +79,19 @@ class User(db.Model, UserMixin):
             raise NotImplementedError("No `id` attribute - override `get_id`") from None
 
 
+class Status(db.Model):
+    __tablename__ = 'status'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(45), nullable=False)
+
 
 class Order(db.Model):
     __tablename__ = 'order'
     id = db.Column(db.Integer, primary_key=True)
-    order_date = db.Column(db.Date, nullable=False)
+    order_date = db.Column(db.DateTime, default=datetime.utcnow)
     total_price = db.Column(db.Integer, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    status_id = db.Column(db.Integer, db.ForeignKey('status.id'))
 
 
 
@@ -86,15 +101,15 @@ class Cart(db.Model):
     quantity = db.Column(db.Integer, nullable=False)
     game_id = db.Column(db.Integer, db.ForeignKey('game.id'))
     order_id = db.Column(db.Integer, db.ForeignKey('order.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id',ondelete='CASCADE'))
 
-    # Обратная ссылка на заказ
-    order = db.relationship('Order', backref='cart')
+    game = db.relationship('Game', backref='cart', lazy='joined', cascade='save-update, merge')
+
 
 
 @manager.user_loader
 def load_user(user_id):
     return User.query.get(user_id)
-
 
 #
 # def drop_tables():
@@ -102,4 +117,3 @@ def load_user(user_id):
 #         db.drop_all()
 #
 #
-
