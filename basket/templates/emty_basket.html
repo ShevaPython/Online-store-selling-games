@@ -41,21 +41,21 @@
                         <div class="cart-header__title">Name</div>
                         <div class="cart-header__cost">Price</div>
                     </div>
-                    {% for cart_item in cart_items %}
+
                     <div class="product">
                         <div class="product__img">
-                            <img src="{{ cart_item.game.photo }}" alt="img">
+                            <img src="#" alt="emty">
                         </div>
-                        <div class="product__title">{{ cart_item.game.name }}</div>
-                        <div class="product__price"> {{ cart_item.game.price }}₴</div>
+                        <div class="product__title">Emty</div>
+                        <div class="product__price"> Emty₴</div>
                         <div class="product__delete">
-                            <button  class="delete-button" data-game-id="{{ cart_item.game.id }}">
+                            <button  class="delete-button" data-game-id="{{ emty }}">
                                 Delete
                             </button>
                         </div>
                     </div>
                     <div class="cart-footer"></div>
-                    {% endfor %}
+
                 </section>
             </div>
         </div>
@@ -65,9 +65,9 @@
 <div class="total-section">
     <div class="total-section__button">
         <h3>Total Price: <span class="total-price">{{ total_price }}</span></h3>
-            <div id="message-section" style="color: red"></div>
-        <button id="payment-button" class="payment-button">Оплатить</button>
+
     </div>
+
 
 
 </div>
@@ -75,59 +75,3 @@
 
 </body>
 </html>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-<script>
-    $(document).ready(function () {
-        $('#payment-button').click(function () {
-            console.log('asdasdasdasdasd')
-            $.ajax({
-                url: '/basket/pay_basket',
-                type: 'POST',
-                dataType: 'json',
-                success: function (response) {
-                    showMessage(response.message);
-                },
-                error: function () {
-                    showMessage('Payment failed');
-                }
-            });
-        });
-
-        function showMessage(message) {
-            $('#message-section').text(message);
-        }
-    });
-
-
-
-</script>
-<script>
-    $(document).ready(function () {
-        $('.delete-button').click(function () {
-            var gameId = $(this).data('game-id');
-
-            $.ajax({
-                url: '/basket/delete_game',
-                type: 'POST',
-                data: { 'game-id': gameId },
-                dataType: 'json',
-                success: function (response) {
-                    showMessage(response.message);
-                    // Optionally, you can remove the deleted game row from the table
-                    $(this).closest('tr').remove();
-                     location.reload(); // Обновить страницу
-                },
-                error: function () {
-                    showMessage('Failed to delete the game from the cart');
-                    location.reload(); // Обновить страницу
-
-                }
-            });
-        });
-
-        function showMessage(message) {
-            $('#message-section').text(message);
-        }
-    });
-</script>

@@ -1,40 +1,36 @@
-from flask_login import current_user
-
 from app_shop import app
 from flask import render_template, url_for, redirect, request
-from app_shop.models import Game, Genre, User
+from app_shop.models import Game, Genre, GamesGenres
+from app_shop import db
 
 
 @app.route('/')
 def index_page():
-    genres = Genre.query.all()
-    if current_user.is_authenticated:
-        cart_count = len(current_user.cart)
-    else:
-        cart_count = 0
-    return render_template('shop/index.html', genres=genres,cart_count=cart_count )
+    games = Game.query.all()
+    return render_template('shop/index.html',games=games)
 
 
-
-@app.route('/base')
-def base():
-
-    genres = Genre.query.all()
-
-
-    return render_template('base.html', genres=genres)
-
-
-@app.route('/all_game')
+@app.route('/shop_games')
 def all_game_page():
-    if current_user.is_authenticated:
-        cart_count = len(current_user.cart)
-    else:
-        cart_count = 0
-    all_games = Game.query.all()
-    genres = Genre.query.all()
 
-    return render_template('shop/show_all_games.html', all_games=all_games, genres=genres,cart_count=cart_count)
+    all_games = Game.query.all()
+    return render_template('shop/games.html', all_games=all_games)
+
+
+@app.route('/genre/<gerne_name>')
+def search_genre(gerne_name):
+
+    all_games = db.session.query(Game).join(GamesGenres, GamesGenres.game_id == Game.id).join(Genre,
+                                                                                              Genre.id == GamesGenres.genre_id).filter(
+        Genre.name == gerne_name).all()
+
+    return render_template('shop/games.html', all_games=all_games)
+
+
+@app.route('/contact')
+def contact():
+
+    return render_template('shop/contact.html')
 
 
 @app.after_request

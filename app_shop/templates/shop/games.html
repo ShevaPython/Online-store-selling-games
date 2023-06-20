@@ -1,0 +1,128 @@
+{% extends 'shop/index.html' %}
+
+{% block title %}All games{% endblock %}
+
+{% block menu_genres %}
+    <li class="dropdown"><a href="#">Genres</a>
+        <ul>
+            {% for genre in genres() %}
+                <li><a href="{{ url_for('search_genre', gerne_name=genre.name) }}">{{ genre.name }}</a></li>
+            {% endfor %}
+        </ul>
+    </li>
+{% endblock %}
+
+
+{% block content %}
+    <!--Page Title-->
+    <section class="page-banner"
+             style="background-image:url({{ url_for('static',filename='images/background/title-bg.jpg') }});">
+        <div class="auto-container">
+            <div class="inner-container clearfix">
+                <h1>Search by genre</h1>
+                <br>
+                <br>
+                <ul class="bread-crumb clearfix">
+                </ul>
+
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Players Section -->
+    <section class="players-section players-page-section">
+        <div class="auto-container">
+            <div class="row clearfix">
+
+                {% for game in all_games %}
+                    <!-- Player Block -->
+                    <div class="player-block col-lg-4 col-md-6 col-sm-12 wow fadeInLeft" data-wow-delay="0ms">
+                        <div class="inner-box hvr-bob">
+                            <div class="image">
+                                <a href="#"><img src="{{ game.photo }}" alt=""/></a>
+                            </div>
+                            <div class="lower-content">
+                                <h3><a href="#">{{ game.name }}</a></h3>
+                                <div class="level">Price : {{ game.price }}</div>
+                                <div class="level">Publisher: {{ game.publisher.name }}</div>
+                                <div class="level">Developer: {{ game.developer.name }}</div>
+                                <div class="level">Genres:
+                                    {% for genre in game.genres %}
+                                        {{ genre.name }}
+                                        {% if not loop.last %}, {% endif %}
+                                    {% endfor %}
+                                </div>
+                                <ul class="social-icons">
+                                    {% if current_user.is_authenticated %}
+                                    <form id="add-to-basket-form"
+                                          action="{{ url_for('basket.add_basket', game_id=game.id) }}"
+                                          method="post">
+                                        <button type="submit" class="add-to-basket-btn">Add to Basket</button>
+                                    </form>
+                                    {% else %}
+                                     <form
+                                          action="{{ url_for('auth.login_page') }}"
+                                          method="get">
+                                        <button type="submit" class="add-to-basket-btn">Add to Basket</button>
+                                    </form>
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+
+
+            </div>
+
+        </div>
+    </section>
+    <script>
+
+        // Обработчик события отправки формы
+        document.addEventListener('submit', function (event) {
+            if (event.target.matches('#add-to-basket-form')) {
+                event.preventDefault(); // Предотвращаем отправку формы
+
+                // Отправляем AJAX-запрос на сервер
+                fetch(event.target.action, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.message === 'Game has been successfully added to the basket') {
+                            // Отображаем сообщение об успешном добавлении игры
+                            alert('Game has been successfully added to the basket');
+
+                        } else {
+                            // Отображаем сообщение об ошибке
+                            alert('Failed to add the game to the basket');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+            }
+        });
+    </script>
+
+{% endblock content %}
+
+
+{#<!--End pagewrapper-->#}
+{##}
+{#<script src="js/jquery.js"></script>#}
+{#<script src="js/popper.min.js"></script>#}
+{#<script src="js/bootstrap.min.js"></script>#}
+{#<script src="js/jquery-ui.js"></script>#}
+{#<script src="js/jquery.fancybox.js"></script>#}
+{#<script src="js/owl.js"></script>#}
+{#<script src="js/appear.js"></script>#}
+{#<script src="js/wow.js"></script>#}
+{#<script src="js/scrollbar.js"></script>#}
+{#<script src="js/script.js"></script>#}
+

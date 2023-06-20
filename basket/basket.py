@@ -49,8 +49,11 @@ def index_basket():
     # total_price
     total_price = sum(item.game.price for item in cart_items)
 
-    # Возвращайте шаблон, передавая в него объекты корзины
-    return render_template('basket.html', cart_items=cart_items, total_price=total_price)
+    if total_price > 0:
+        # Возвращайте шаблон, передавая в него объекты корзины
+        return render_template('basket.html', cart_items=cart_items, total_price=total_price)
+    else:
+        return render_template('emty_basket.html', total_price=total_price)
 
 
 @cart_bp.route('/delete_game', methods=['POST'])
@@ -60,7 +63,7 @@ def delete_game():
     user = current_user
 
     # Find the cart item with the specified game ID for the current user
-    cart_item = Cart.query.filter_by(user_id=user.id, game_id=game_id, order_id=None).first()
+    cart_item = db.session.query(Cart).filter_by(user_id=user.id, game_id=game_id, order_id=None).first()
 
     if cart_item:
         try:
@@ -80,7 +83,7 @@ def delete_game():
 @cart_bp.route('/pay_basket', methods=['POST'])
 @login_required
 def pay_basket():
-    user = current_user
+    user = User.query.get(current_user.id)
 
     # Получите все элементы корзины для текущего пользователя
     cart_items = Cart.query.filter_by(user_id=user.id, order_id=None).all()
@@ -93,18 +96,20 @@ def pay_basket():
         return jsonify({'message': 'Insufficient funds'})
 
     try:
-        # Обновите баланс пользователя
-        user.balance -= total_price
-
-        # Обновите состояние заказа
+        # Создайте новый заказ
         order = Order(total_price=total_price, user=user, status_id=1)
         db.session.add(order)
+        db.session.commit()
 
         # Привяжите корзину к заказу
         for item in cart_items:
             item.order_id = order.id
-            # Очистите корзину пользователя
-            db.session.delete(item)
+
+        # Очистите корзину пользователя
+        db.session.query(Cart).filter_by(user_id=user.id, order_id=order.id).delete()
+
+        # Обновите баланс пользователя
+        user.balance -= total_price
 
         db.session.commit()
         return jsonify({'message': 'Payment successful'}), 200
@@ -113,5 +118,3 @@ def pay_basket():
         return jsonify({'message': 'Payment failed'}), 400
     finally:
         db.session.close()
-
-

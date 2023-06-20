@@ -47,6 +47,7 @@ class Game(db.Model):
     # Отношение многие-ко-многим с моделью Genre
     genres = db.relationship('Genre', secondary='games_genres', lazy='subquery',
                              backref=db.backref('games', lazy=True))
+    twitch_stream = db.Column(db.Text,nullable=True)
 
 
 class Genre(db.Model):
@@ -68,7 +69,7 @@ class User(db.Model, UserMixin):
     orders = db.relationship('Order', backref='user', lazy=True)
     # Отношение один-ко-многим с таблицей Cart
     cart = db.relationship('Cart', backref='user', lazy=True, cascade='all, delete, delete-orphan')
-    balance = db.Column(db.Float,default=None)
+    balance = db.Column(db.Float,default=0)
 
     # Отношение один-ко-многим с таблицей Cart
 

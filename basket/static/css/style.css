@@ -1,11 +1,11 @@
 body {
-    font-family: Arial, sans-serif;
-    background-image: url("../images/1.jpeg");
+    font-family: 'Montserrat', sans-serif;
+    background-image: url("../images/1.jpg");
     background-attachment: fixed;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    height: 100vh;
+    /*height: 100vh;*/
     display: flex;
     justify-content: center;
     align-items: center;
@@ -13,6 +13,8 @@ body {
     padding: 0;
     margin: 0;
     width: 100vw;
+    color: #ffffff;
+
 }
 
 .header_nav {
@@ -67,53 +69,92 @@ body {
 }
 
 
-.container {
-    max-width: 800px;
-    margin:  auto;
-    padding: 10px;
-    color: white;
-    max-height: 700px;
+
+.container__wrapper {
+     /*margin-top: 70px;*/
 }
 
-.card {
+.section-cart {
+    padding: 70px 0 20px;
+    margin-top: 70px;
+}
+
+.section-cart__header {
+    margin-bottom: 40px;
     text-align: center;
-    margin-bottom: 0;
-    background-color: #252323;
-    padding: 20px;
 }
 
-.table {
-    width: 100%;
-    border-collapse: collapse;
+.container {
+    
+    padding: 0 15px;
 }
 
-.table th,
-.table td {
-    padding: 20px;
-    border: 1px solid #2e862f;
-    background-color: #252323;
+h1 {
+    font-size: 45px;
+    line-height: 1.3;
+    font-weight: 700;
+    
 }
 
-.table th {
-    background-color: #0e1010;
+.cart-header {
+    display: grid;
+    grid-template-columns: 2fr repeat(2, 3fr) 1fr;
+    column-gap: 20px;
+    padding: 22px 0;
+    font-weight: 700;
+    font-size: 13px;
+    line-height: 120%;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    background-color: rgb(47, 79, 79);
 }
 
-table img {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
-    border-radius: 10px;
+.cart-header__title {
+    grid-column-start: 2;
+}
+
+.product {
+    display: grid;
+    grid-template-columns: 2fr repeat(2, 3fr) 1fr;
+    column-gap: 20px;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 130%;
+    background-color: rgb(72 108 108);
+    /* opacity: 0.5; */
+}
+
+.product img {
+    width: 100px;
+    height: 100px;
+}
+
+.product > * {
+    align-self: center;
+}
+
+.product__img {
+    justify-self: center;
+    padding: 10px;
 }
 
 .delete-button {
-    background-color: #a94949;
-    color: #131010;
+    background-color: #a95e4994;
+    color: #c7c9bfe3;
     padding: 5px 10px;
     border: none;
     cursor: pointer;
+    outline: none;
+    border-radius: 5px;
 }
 
+.product__delete {
+    padding-right: 15px;
+}
+
+
 .total-section {
+    width: 68%;
     text-align: center;
     margin-top: 20px;
     display: flex;
@@ -123,6 +164,13 @@ table img {
     color: yellowgreen;
 }
 
+.total-section__button{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+} 
+
 .total-price {
     font-size: 24px;
     font-weight: bold;
@@ -130,16 +178,24 @@ table img {
 }
 
 .payment-button {
+    height: 40px;
+    display: block;
     background-color: #2e9a78;
     color: #ffffff;
-    padding: 10px 20px;
     border: none;
     cursor: pointer;
-}
+    border-radius: 5px;
+} 
+
+@media screen and (min-width: 1280px) {
+    .container__wrapper {
+        width: 70%;
+    }
+  }
 
 @media screen and (max-width: 768px) {
-  .container {
-    max-width: 100%;
+  .container__wrapper {
+    max-width: 900px;
     padding: 0 10px;
   }
 
@@ -159,7 +215,7 @@ table img {
     height: auto;
   }
 
-  .container {
+  .container__wrapper {
     padding: 0 5px;
   }
 
@@ -170,5 +226,36 @@ table img {
 
   .total-price {
     font-size: 18px;
+  }
+  
+  .cart-header {
+    height: 1px;
+    padding: 0;
+    font-size: 0;
+  }
+  
+  .product {
+    grid-template-columns: repeat(6, 1fr);
+    grid-auto-rows: minmax(60px auto);
+    column-gap: 10px;
+    row-gap: 15px;
+  }
+
+  .product__img {
+    grid-column: 1/4;
+  }
+
+  .product__title {
+    grid-column: 4/-1;
+  }
+
+  .product__price {
+    grid-column: 1/4;
+    justify-self: center;
+  }
+
+  .product__delete {
+    grid-column: 4/-1;
+    justify-self: center;
   }
 }
