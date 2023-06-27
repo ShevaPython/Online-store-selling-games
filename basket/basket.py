@@ -1,15 +1,25 @@
-import datetime
+import base64
+import json
 
 from flask import (
-    Blueprint, flash, redirect, render_template, request, url_for, jsonify
+    Blueprint, redirect, render_template, request, url_for, jsonify
 )
 from flask_login import current_user, login_required
+from sqlalchemy import or_
 from builtins import sum
 
+from liqpay import LiqPay
+from .verify_callback import verify_callback_data
+
 from app_shop import db
-from app_shop.models import Game, Cart, Order, User
+from app_shop.models import  Cart, Order, User
+import config
+
 
 cart_bp = Blueprint('basket', __name__, template_folder='templates', static_folder='static')
+
+# Создайте экземпляр класса LiqPay
+liqpay = LiqPay(config.LIQPAY_PUBLIC, config.LIQPAY_PRIVATE)
 
 
 @cart_bp.route('add_basket/<int:game_id>', methods=['POST'])
@@ -45,7 +55,8 @@ def index_basket():
     user = current_user
 
     # Получите все элементы корзины для текущего пользователя
-    cart_items = Cart.query.filter_by(user_id=user.id, order_id=None).all()
+    cart_items = Cart.query.filter_by(user_id=user.id).filter(or_(Cart.order_id == None,
+                                                                  Cart.order_id != None)).all()
     # total_price
     total_price = sum(item.game.price for item in cart_items)
 
@@ -53,7 +64,7 @@ def index_basket():
         # Возвращайте шаблон, передавая в него объекты корзины
         return render_template('basket.html', cart_items=cart_items, total_price=total_price)
     else:
-        return render_template('emty_basket.html', total_price=total_price)
+        return render_template('empty_basket.html', total_price=total_price)
 
 
 @cart_bp.route('/delete_game', methods=['POST'])
@@ -63,7 +74,9 @@ def delete_game():
     user = current_user
 
     # Find the cart item with the specified game ID for the current user
-    cart_item = db.session.query(Cart).filter_by(user_id=user.id, game_id=game_id, order_id=None).first()
+    cart_item = db.session.query(Cart).filter_by(user_id=user.id, game_id=game_id).filter(
+        or_(Cart.order_id == None,
+            Cart.order_id != None)).first()
 
     if cart_item:
         try:
@@ -80,41 +93,77 @@ def delete_game():
         return jsonify({'message': 'Cart item not found'})
 
 
-@cart_bp.route('/pay_basket', methods=['POST'])
+@cart_bp.route('/payment', methods=['GET', 'POST'])
 @login_required
-def pay_basket():
+def payment():
     user = User.query.get(current_user.id)
 
     # Получите все элементы корзины для текущего пользователя
-    cart_items = Cart.query.filter_by(user_id=user.id, order_id=None).all()
-
-    # Рассчитайте общую стоимость товаров в корзине
+    cart_items = Cart.query.filter_by(user_id=user.id).filter(or_(Cart.order_id == None,
+                                                                  Cart.order_id != None)).all()
+    # total_price
     total_price = sum(item.game.price for item in cart_items)
 
-    # Проверьте, достаточно ли средств на счету пользователя
-    if user.balance is None or user.balance < total_price:
-        return jsonify({'message': 'Insufficient funds'})
+    if request.method == 'POST':
+        try:
+            # Создайте новый заказ
+            order = Order(total_price=total_price, user=user, status_id=2)
+            db.session.add(order)
+            db.session.commit()
 
-    try:
-        # Создайте новый заказ
-        order = Order(total_price=total_price, user=user, status_id=1)
-        db.session.add(order)
-        db.session.commit()
+            # Привяжите корзину к заказу
+            for item in cart_items:
+                item.order_id = order.id
 
-        # Привяжите корзину к заказу
-        for item in cart_items:
-            item.order_id = order.id
+            # # Очистите корзину пользователя
+            # db.session.query(Cart).filter_by(user_id=user.id, order_id=order.id).delete()
+            # db.session.commit()
 
-        # Очистите корзину пользователя
-        db.session.query(Cart).filter_by(user_id=user.id, order_id=order.id).delete()
+            params = {
+                "action": "pay",
+                "amount": str(total_price),
+                "currency": "UAH",
+                "description": 'Text',
+                "order_id": str(order.id),
+                "version": "3",
+                "result_url": url_for('basket.liqpay_callback', _external=True)
+            }
+            form = liqpay.cnb_form(params)
+            return render_template('payment.html', cart_items=cart_items, total_price=total_price, form=form)
 
-        # Обновите баланс пользователя
-        user.balance -= total_price
+        except:
+            db.session.rollback()
 
-        db.session.commit()
-        return jsonify({'message': 'Payment successful'}), 200
-    except:
-        db.session.rollback()
-        return jsonify({'message': 'Payment failed'}), 400
-    finally:
-        db.session.close()
+        finally:
+            db.session.close()
+
+    # Если метод запроса GET, просто отображаем содержимое корзины
+    return redirect(url_for('basket.index_basket'))
+
+
+@cart_bp.route('/liqpay_callback', methods=['POST'])
+def liqpay_callback():
+    data = request.form.get('data')
+    signature = request.form.get('signature')
+    private_key = config.LIQPAY_PRIVATE
+    if verify_callback_data(data, signature, private_key):
+        decoded_data = base64.b64decode(data).decode('utf-8')
+        callback_data = json.loads(decoded_data)
+        # Отримайте статус платежу з callback_data
+        payment_status = callback_data.get('status')
+
+        if payment_status == 'success':
+            # Платіж успішний, виконайте необхідні дії
+            # Наприклад, оновіть статус замовлення в базі даних
+
+            return 'OK'
+        elif payment_status == 'failure':
+            # Платіж не вдалося, виконайте необхідні дії
+
+            return 'OK'
+        else:
+            # Інший статус платежу, виконайте відповідні дії
+
+
+
+            return render_template('callback.html', data=callback_data, signature=signature)

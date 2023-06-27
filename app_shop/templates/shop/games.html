@@ -2,16 +2,6 @@
 
 {% block title %}All games{% endblock %}
 
-{% block menu_genres %}
-    <li class="dropdown"><a href="#">Genres</a>
-        <ul>
-            {% for genre in genres() %}
-                <li><a href="{{ url_for('search_genre', gerne_name=genre.name) }}">{{ genre.name }}</a></li>
-            {% endfor %}
-        </ul>
-    </li>
-{% endblock %}
-
 
 {% block content %}
     <!--Page Title-->
@@ -20,9 +10,11 @@
         <div class="auto-container">
             <div class="inner-container clearfix">
                 <h1>Search by genre</h1>
-                <br>
-                <br>
                 <ul class="bread-crumb clearfix">
+                    {% for genre in genres() %}
+                        <li><a href="{{ url_for('blog.all_game_page', gerne_name=genre.name) }}">{{ genre.name }}</a>
+                        </li>
+                    {% endfor %}
                 </ul>
 
             </div>
@@ -35,7 +27,7 @@
         <div class="auto-container">
             <div class="row clearfix">
 
-                {% for game in all_games %}
+                 {% for game in games_pagination.items %}
                     <!-- Player Block -->
                     <div class="player-block col-lg-4 col-md-6 col-sm-12 wow fadeInLeft" data-wow-delay="0ms">
                         <div class="inner-box hvr-bob">
@@ -55,17 +47,15 @@
                                 </div>
                                 <ul class="social-icons">
                                     {% if current_user.is_authenticated %}
-                                    <form id="add-to-basket-form"
-                                          action="{{ url_for('basket.add_basket', game_id=game.id) }}"
-                                          method="post">
-                                        <button type="submit" class="add-to-basket-btn">Add to Basket</button>
-                                    </form>
+                                        <form id="add-to-basket-form"
+                                              action="{{ url_for('basket.add_basket', game_id=game.id) }}"
+                                              method="post">
+                                            <button type="submit" class="add-to-basket-btn">Add to Basket</button>
+                                        </form>
                                     {% else %}
-                                     <form
-                                          action="{{ url_for('auth.login_page') }}"
-                                          method="get">
-                                        <button type="submit" class="add-to-basket-btn">Add to Basket</button>
-                                    </form>
+                                        <form action="{{ url_for('auth.login_page') }}" method="get">
+                                            <button type="submit" class="add-to-basket-btn">Add to Basket</button>
+                                        </form>
                                     {% endif %}
                                 </ul>
                             </div>
@@ -77,7 +67,42 @@
             </div>
 
         </div>
+
     </section>
+  <!-- Pagination -->
+    <div class="pagination_page">
+        <nav aria-label="...">
+            <ul class="pagination pagination-sm">
+                {% if games_pagination.has_prev %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ url_for(request.endpoint, page=games_pagination.prev_num) }}">Previous</a>
+                    </li>
+                {% endif %}
+
+               {% for num in games_pagination.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=1) %}
+                    {% if num %}
+                        {% if games_pagination.page == num %}
+                            <li class="page-item active" aria-current="page">
+                                <span class="page-link">{{ num }}</span>
+                            </li>
+                        {% else %}
+                            <li class="page-item">
+                                <a class="page-link" href="{{ url_for(request.endpoint, page=num) }}">{{ num }}</a>
+                            </li>
+                        {% endif %}
+                    {% else %}
+                        <li class="page-item disabled"><span class="page-link">...</span></li>
+                    {% endif %}
+                {% endfor %}
+
+                {% if games_pagination.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ url_for(request.endpoint, page=games_pagination.next_num) }}">Next</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
     <script>
 
         // Обработчик события отправки формы
@@ -113,16 +138,4 @@
 {% endblock content %}
 
 
-{#<!--End pagewrapper-->#}
-{##}
-{#<script src="js/jquery.js"></script>#}
-{#<script src="js/popper.min.js"></script>#}
-{#<script src="js/bootstrap.min.js"></script>#}
-{#<script src="js/jquery-ui.js"></script>#}
-{#<script src="js/jquery.fancybox.js"></script>#}
-{#<script src="js/owl.js"></script>#}
-{#<script src="js/appear.js"></script>#}
-{#<script src="js/wow.js"></script>#}
-{#<script src="js/scrollbar.js"></script>#}
-{#<script src="js/script.js"></script>#}
 

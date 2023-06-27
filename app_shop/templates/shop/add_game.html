@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        form {
+            display: grid;
+            gap: 15px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <ul class=flashes>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endwith %}
+<div class="container">
+    <h1>Add Game</h1>
+    <form method="POST" action="{{ url_for('blog.add_game') }}">
+        <label for="game_name">Game Name:</label>
+        <input type="text" id="game_name" name="game_name" required>
+
+        <label for="game_price">Game Price:</label>
+        <input type="number" id="game_price" name="game_price" required>
+
+        <label for="game_photo">Photo:</label>
+        <input type="text" id="game_photo" name="game_photo">
+
+        <label for="game_description">Description:</label>
+        <textarea id="game_description" name="game_description" required></textarea>
+
+        <label for="game_genres">Genres:</label>
+        <input type="text" id="game_genres" name="game_genres" required>
+        <small>Enter multiple genres separated by commas (e.g., Genre 1, Genre 2)</small>
+
+        <label for="game_twitch_stream">Twitch Stream:</label>
+        <input type="text" id="game_twitch_stream" name="game_twitch_stream">
+
+        <label for="game_developers">Developers:</label>
+        <input type="text" id="game_developers" name="game_developers" required>
+        <small>Enter multiple developers separated by commas (e.g., Developer 1, Developer 2)</small>
+
+        <label for="game_publishers">Publishers:</label>
+        <input type="text" id="game_publishers" name="game_publishers" required>
+        <small>Enter multiple publishers separated by commas (e.g., Publisher 1, Publisher 2)</small>
+
+
+        <button type="submit">Add Game</button>
+    </form>
+</div>
+</body>
+</html>

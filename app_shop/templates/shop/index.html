@@ -7,7 +7,7 @@
     <li class="dropdown"><a href="#">Genres</a>
         <ul>
              {% for genre in genres() %}
-                <li><a href="{{ url_for('search_genre', gerne_name=genre.name) }}">{{ genre.name }}</a></li>
+                <li><a href="{{ url_for('blog.all_game_page', gerne_name=genre.name) }}">{{ genre.name }}</a></li>
             {% endfor %}
 
         </ul>
@@ -80,7 +80,7 @@
             </div>
 
             <div class="row clearfix">
-                {% for game in games %}
+                {% for game in all_games%}
                 <div class="default-portfolio-item col-lg-4 col-md-4 col-sm-12 wow fadeInUp" data-wow-delay="0ms"
                      data-wow-duration="1500ms">
                     <div class="inner-box hvr-bob">
@@ -114,47 +114,6 @@
     <!-- End Welcome Section -->
 
 
-
-    <!-- Gallery Section Two -->
-    <section class="gallery-section-two">
-
-        <div class="auto-container">
-            <!-- Sec Title -->
-            <div class="sec-title centered">
-                <div class="title">Check Out Our</div>
-                <h2>Photos gallery</h2>
-            </div>
-
-            <div class="row clearfix">
-
-                <!--Gallery Item-->
-                <div class="gallery-item col-lg-4 col-md-6 col-sm-12 wow fadeInLeft" data-wow-delay="0ms">
-                    <div class="inner-box">
-                        <figure class="image-box">
-                            <img src="{{ url_for('static',filename='images/gallery/17.jpg') }}" alt="">
-                            <!--Overlay Box-->
-                            <div class="overlay-box">
-                                <div class="overlay-inner">
-                                    <div class="content">
-                                        <a href="#" class="link"><span class="icon flaticon-unlink"></span></a>
-                                        <a href="{{ url_for('static',filename='images/gallery/17.jpg') }}"
-                                           data-fancybox="gallery-2" data-caption="" class="link"><span
-                                                class="icon flaticon-add"></span></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </figure>
-                    </div>
-                </div>
-
-
-            </div>
-
-        </div>
-
-    </section>
-
-
     <!-- Call To Action Section -->
     <section class="facts-section">
         <!-- Title Boxed -->
@@ -163,7 +122,7 @@
             <div class="auto-container">
                 <div class="content wow fadeInLeft" data-wow-delay="0ms">
                     <h2>Coffe Games WHERE DIGITAL <br> WORLDS MEET REAL <br> INNOVATION</h2>
-                    <a href="{{ url_for('contact') }}" class="theme-btn btn-style-one"><span
+                    <a href="{{ url_for('blog.contact') }}" class="theme-btn btn-style-one"><span
                             class="btn-title">view tournaments</span></a>
                 </div>
             </div>
@@ -259,76 +218,7 @@
     </section>
     <!-- End Call To Action Section -->
 
-        <!-- Questions Section -->
-    <section class="questions-section">
-        <div class="auto-container">
-            <!-- Sec Title -->
-            <div class="sec-title centered">
-                <div class="title">Frequently Asked Questions</div>
-                <h2>Question & Answers</h2>
-            </div>
 
-            <!-- Inner Container -->
-            <div class="inner-container">
-                <div class="row clearfix">
-
-                    <!-- Question Block -->
-                    <div class="question-block col-lg-6 col-md-12 col-sm-12">
-                        <div class="inner-box">
-                            <div class="icon-box">
-                                <span class="icon flaticon-question"></span>
-                            </div>
-                            <h3><a href="#">How to download the game?</a></h3>
-                            <div class="text">There are many variations of passages of Lorem Ipsum available, but the
-                                majority have suffered alteration in some form, by injected humour.
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Question Block -->
-                    <div class="question-block col-lg-6 col-md-12 col-sm-12">
-                        <div class="inner-box">
-                            <div class="icon-box">
-                                <span class="icon flaticon-question"></span>
-                            </div>
-                            <h3><a href="#">Is there any age restrictions?</a></h3>
-                            <div class="text">There are many variations of passages of Lorem Ipsum available, but the
-                                majority have suffered alteration in some form, by injected humour.
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Question Block -->
-                    <div class="question-block col-lg-6 col-md-12 col-sm-12">
-                        <div class="inner-box">
-                            <div class="icon-box">
-                                <span class="icon flaticon-question"></span>
-                            </div>
-                            <h3><a href="#">how to become a team member?</a></h3>
-                            <div class="text">There are many variations of passages of Lorem Ipsum available, but the
-                                majority have suffered alteration in some form, by injected humour.
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Question Block -->
-                    <div class="question-block col-lg-6 col-md-12 col-sm-12">
-                        <div class="inner-box">
-                            <div class="icon-box">
-                                <span class="icon flaticon-question"></span>
-                            </div>
-                            <h3><a href="#">Is there any reward for winners?</a></h3>
-                            <div class="text">There are many variations of passages of Lorem Ipsum available, but the
-                                majority have suffered alteration in some form, by injected humour.
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-
-        </div>
-    </section>
 
 
         <!--Sponsors Section-->

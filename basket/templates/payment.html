@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}Basket{% endblock %}</title>
+    <link rel="shortcut icon" href="#{{ url_for('static',filename='images/favicon.png') }}" type="image/x-icon">
+    <link rel="icon" href="{{ url_for('static',filename='images/favicon.png') }}" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('.static', filename='css/style.css') }}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+
+</head>
+<body>
+
+
+<div class="container__wrapper">
+    <div class="header_nav">
+
+        <div class="nav_links">
+            <a href="{{ url_for('blog.index_page') }}">Home</a>
+            <a href="{{ url_for('blog.all_game_page') }}">Shop-Games</a>
+            <a href="#">About me</a>
+        </div>
+        <div class="nav_links">
+            <a href="#">Help & Support</a>
+            <a href="#">Photos Gallery</a>
+
+        </div>
+    </div>
+    <section class="section-cart">
+        <div class="section-cart__header">
+            <div class="container">
+                <h1>Order is processed</h1>
+            </div>
+        </div>
+        <div class="section-cart__body">
+            <div class="container">
+                <section class="cart">
+                    <div class="cart-header">
+                        <div class="cart-header__title">Name</div>
+                        <div class="cart-header__cost">Price</div>
+                    </div>
+                    {% for cart_item in cart_items %}
+                    <div class="product">
+                        <div class="product__img">
+                            <img src="{{ cart_item.game.photo }}" alt="img">
+                        </div>
+                        <div class="product__title">{{ cart_item.game.name }}</div>
+                        <div class="product__price"> {{ cart_item.game.price }}₴</div>
+                    </div>
+                    <div class="cart-footer"></div>
+                    {% endfor %}
+                </section>
+            </div>
+        </div>
+    </section>
+
+</div>
+<div class="total-section">
+    <div class="total-section__button">
+        <h3>Total Price: <span class="total-price">{{ total_price }}</span></h3>
+{{ form|safe }}
+    </div>
+
+
+</div>
+<div class=""></div>
+
+</body>
+</html>

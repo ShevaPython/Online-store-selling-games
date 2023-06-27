@@ -58,9 +58,9 @@
                         <div class="auto-container clearfix">
                             <!--Logo-->
                             <div class="logo-outer">
-                                <div class="logo"><a href="{{ url_for ('index_page') }}"><img
+                                <div class="logo"><a href="{{ url_for ('blog.index_page') }}"><img
                                         src="{{ url_for('static',filename='images/logo.png') }}" alt=""
-                                        title="Gamon - Digital Gaming and Esports HTML Template"></a>
+                                        title="Games Coffe"></a>
                                 </div>
                             </div>
 
@@ -73,20 +73,20 @@
                                 <nav class="main-menu navbar-expand-md navbar-light">
                                     <div class="collapse navbar-collapse show clearfix" id="navbarSupportedContent">
                                         <ul class="navigation clearfix pull-left">
-                                            <li class="current dropdown"><a href="{{ url_for('index_page') }}">Home</a>
+                                            <li class="current dropdown"><a href="{{ url_for('blog.index_page') }}">Home</a>
 
                                             </li>
 
                                             <li class="dropdown"><a href="#">Shop</a>
                                                 <ul>
 
-                                                    <li><a href="{{ url_for ('all_game_page') }}">All game</a></li>
+                                                    <li><a href="{{ url_for ('blog.all_game_page') }}">All game</a></li>
                                                     {% block menu_genres %}
                                                         <li class="dropdown"><a href="#">Genres</a>
                                                             <ul>
-                                                                {% for ganr in genres %}
-                                                                    <li><a href="">{{ ganr.name }}</a></li>
-                                                                {% endfor %}
+
+                                                                    <li><a href="">ganr.name</a></li>
+
 
                                                             </ul>
                                                         </li>
@@ -97,7 +97,7 @@
                                         </ul>
 
                                         <ul class="navigation pull-right clearfix">
-                                            <li class="dropdown"><a href="{{ url_for('contact') }}">Contact</a>
+                                            <li class="dropdown"><a href="{{ url_for('blog.contact') }}">Contact</a>
 
                                             </li>
                                             {% block card_count %}
@@ -208,7 +208,7 @@
                                                     <li><a href="#">About</a></li>
                                                     <li><a href="#">Our Team</a></li>
                                                     <li><a href="#">Gallery</a></li>
-                                                    <li><a href="{{ url_for('contact') }}">Contact</a></li>
+                                                    <li><a href="{{ url_for('blog.contact') }}">Contact</a></li>
                                                 </ul>
                                             </div>
                                             <div class="column col-lg-6 col-md-6 col-sm-12">
