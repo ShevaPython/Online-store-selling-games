@@ -16,23 +16,33 @@
                         </li>
                     {% endfor %}
                 </ul>
-
+    <div>
+        <form method="GET" action="{{ url_for('blog.show_one_game') }}">
+            <div class="form-group main_call">
+                <div class="wrap_call">
+                <input class="search_all_game" type="text" name="search" value="{{ request.args.get('search','') }}" placeholder="Search" required>
+                <button class="search_call" type="submit"><span class="icon fa fa-search"></span></button>
+                </div>
             </div>
+        </form>
+    </div>
+            </div>
+
         </div>
     </section>
-
 
     <!-- Players Section -->
     <section class="players-section players-page-section">
         <div class="auto-container">
             <div class="row clearfix">
 
-                 {% for game in games_pagination.items %}
+                {% for game in games_pagination.items %}
                     <!-- Player Block -->
                     <div class="player-block col-lg-4 col-md-6 col-sm-12 wow fadeInLeft" data-wow-delay="0ms">
                         <div class="inner-box hvr-bob">
                             <div class="image">
-                                <a href="#"><img src="{{ game.photo }}" alt=""/></a>
+                                <a href="{{ url_for('blog.one_game', game_name=game.name) }}"><img src="{{ game.photo }}" alt=""/></a>
+
                             </div>
                             <div class="lower-content">
                                 <h3><a href="#">{{ game.name }}</a></h3>
@@ -69,7 +79,7 @@
         </div>
 
     </section>
-  <!-- Pagination -->
+    <!-- Pagination -->
     <div class="pagination_page">
         <nav aria-label="...">
             <ul class="pagination pagination-sm">
@@ -79,7 +89,7 @@
                     </li>
                 {% endif %}
 
-               {% for num in games_pagination.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=1) %}
+                {% for num in games_pagination.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=1) %}
                     {% if num %}
                         {% if games_pagination.page == num %}
                             <li class="page-item active" aria-current="page">
@@ -97,7 +107,8 @@
 
                 {% if games_pagination.has_next %}
                     <li class="page-item">
-                        <a class="page-link" href="{{ url_for(request.endpoint, page=games_pagination.next_num) }}">Next</a>
+                        <a class="page-link"
+                           href="{{ url_for(request.endpoint, page=games_pagination.next_num) }}">Next</a>
                     </li>
                 {% endif %}
             </ul>

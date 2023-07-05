@@ -1,10 +1,13 @@
-from flask import render_template, url_for, redirect, request, Blueprint
+from flask import render_template, url_for, redirect, request, Blueprint, flash
 from random import sample
 from sqlalchemy.orm import joinedload
 from app_shop import toolbar
+from app_shop import mail
+from flask_mail import Message
 
 from app_shop import redis
 from app_shop.models import Game, Genre, Developer, Publisher, db
+from app_shop.helpers.is_valid_email import is_valid_email
 
 bp = Blueprint('blog', __name__)
 
@@ -59,12 +62,6 @@ def contact():
     return render_template('shop/contact.html')
 
 
-@bp.after_request
-def redirect_to(response):
-    if response.status_code == 401:
-        return redirect(url_for('auth.login_page') + '?next=' + request.url)
-    return response
-
 
 @bp.route('/add_game', methods=['GET', 'POST'])
 def add_game():
@@ -110,3 +107,58 @@ def add_game():
         return redirect(url_for('blog.add_game'))
     else:
         return render_template('shop/add_game.html')
+
+
+
+
+@bp.route('/show_one_game', methods=['GET'])
+def show_one_game():
+    search_query = request.args.get('search', '')
+    game = Game.query.filter(Game.name.ilike(f"%{search_query}%")).first()
+    if game is not None:
+        return render_template('shop/show_one_game.html',game=game)
+    else:
+        return render_template('shop/error_404.html')
+
+@bp.route('/game/<game_name>')
+def one_game(game_name):
+    # Получите данные игры на основе переданного имени
+    game = Game.query.filter_by(name=game_name).first()
+
+    if game:
+        # Если игра найдена, отобразите шаблон с детальной информацией об игре
+        return render_template('shop/show_one_game.html', game=game)
+    else:
+        # Если игра не найдена, перенаправьте пользователя на страницу 404
+        return redirect(url_for('error_404'))
+
+
+
+@bp.route('/send_mail', methods=['POST'])
+def send_mail():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        email = request.form.get('email')
+        message = request.form.get('message')
+        try:
+
+            if not username or not email or not message:
+                flash('Please fill in all the fields.', 'error')
+                return redirect(url_for('blog.contact'))
+
+            if not is_valid_email(email):
+                flash('Please enter a valid email address.', 'error')
+                return redirect(url_for('blog.contact'))
+
+            msg = Message('New Message from Contact Form',
+                          sender=email,
+                          recipients=['shevadotka@gmail.com'])
+
+            msg.body = f"Name: {username}\nEmail: {email}\n\n{message}"
+            mail.send(msg)
+            flash('Your message has been sent!', 'success')
+            return redirect(url_for('blog.contact'))
+        except Exception as e:
+            flash('An error occurred while sending the message. Please try again later.', 'error')
+
+    return render_template('shop/contact.html')

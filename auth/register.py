@@ -5,7 +5,7 @@ from flask_login import login_user, login_required, logout_user, current_user
 from sqlalchemy.exc import SQLAlchemyError
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from app_shop import db
+from app_shop import db, manager
 from app_shop.models import User
 from auth.auth_validations import validate_registration_form
 from config import EMAIL_SUPERUSER, LOGIN_NAME_SUPERUSER, PASSWORD_SUPERUSER
@@ -84,9 +84,15 @@ def login_page():
     return render_template('login.html')
 
 
+@manager.user_loader
+def load_user(user_id):
+    """Загрузчик для работы с сессией"""
+    return User.query.get(user_id)
+
+
 @auth_bp.route("/logout")
 @login_required
 def logout_page():
     """Страница выхода Юзера"""
     logout_user()
-    return redirect(url_for('blog.index_page'))
+    return redirect(url_for('auth.login_page'))

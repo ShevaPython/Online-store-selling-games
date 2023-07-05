@@ -50,11 +50,12 @@ class Game(db.Model):
     developer_id = db.Column(db.Integer, db.ForeignKey('developer.id'), nullable=False)
     publisher_id = db.Column(db.Integer, db.ForeignKey('publisher.id'), nullable=False)
     photo = db.Column(db.String(200), nullable=True, index=True)
-    description=db.Column(db.String(500),nullable=True)
+    description=db.Column(db.Text,nullable=True)
     # Отношение многие-ко-многим с моделью Genre
     genres = db.relationship('Genre', secondary='games_genres', lazy='joined',
                              backref=db.backref('games', lazy=True))
     twitch_stream = db.Column(db.Text, nullable=True)
+    activation_key=db.Column(db.String(20),nullable=False,unique=True)
 
     def __repr__(self):
         return F"{self.name}"
@@ -83,7 +84,6 @@ class User(db.Model, UserMixin):
     orders = db.relationship('Order', backref='user', lazy='dynamic')
     # Отношение один-ко-многим с таблицей Cart
     cart = db.relationship('Cart', backref='user', lazy='dynamic', cascade='all, delete, delete-orphan')
-    balance = db.Column(db.Float, default=0, index=True)
 
     # Отношение один-ко-многим с таблицей Cart
 
@@ -93,12 +93,18 @@ class User(db.Model, UserMixin):
         except AttributeError:
             raise NotImplementedError("No `id` attribute - override `get_id`") from None
 
+    def is_authenticated(self):
+        """Проверяет, аутентифицирован ли пользователь"""
+        return True  # Измените на соответствующую проверку аутентификации пользователя
+
 
 class Status(db.Model):
     """Модель Статус заказа"""
     __tablename__ = 'status'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(45), nullable=False)
+
+
 
 
 class Order(db.Model):

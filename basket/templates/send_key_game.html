@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/ff01c49563.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="wrapper">
+        <h1 class="title">Coffee Games</h1>
+        <div class="line"></div>
+        <div class="welcome">
+            <h2>Hi Mister!</h2>
+        </div>
+        <div class="line"></div>
+        <div class="letter-content">
+            <p class="letter-content__text">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ducimus molestias inventore eaque, impedit fugit suscipit, 
+                veniam ullam veritatis magnam, numquam tempore minus est aliquam beatae iste ut. Laudantium, qui rem.
+            Aliquid quidem, dicta quis, libero quo a iure aut soluta sint hic modi veritatis esse magnam officiis?
+             Recusandae accusantium pariatur magni, vitae eum laborum hic illum esse cum et ad.
+            </p>
+   {% for g in game %}
+<div>
+    <div class="letter-content__header">
+        <span><strong>Name game : {{ g.name }}</strong></span>
+    </div>
+    <div class="letter-content__select">
+        <img src="{{ g.photo }}" alt="game photo">
+        <span><strong>Activation_key : {{ g.activation_key }}</strong></span>
+        <br>
+        <br>
+    </div>
+</div>
+{% endfor %}
+            <p class="regarts">With best regards <br>
+            Mister Admin and game center team
+            </p>
+        </div>
+    </div>
+</body>
+</html>

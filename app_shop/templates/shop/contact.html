@@ -20,11 +20,22 @@
                             textinh randomised words which don't look even slightly believable.
                         </div>
                         <ul class="social-icons">
-                             <li><a href="https://www.facebook.com/profile.php?id=100014906223276"><span class="fab fa-facebook-square"></span></a></li>
-                            <li><a href="https://instagram.com/shevtsovsn?igshid=YmMyMTA2M2Y="><span class="fab fa-instagram"></span></a></li>
+                            <li><a href="https://www.facebook.com/profile.php?id=100014906223276"><span
+                                    class="fab fa-facebook-square"></span></a></li>
+                            <li><a href="https://instagram.com/shevtsovsn?igshid=YmMyMTA2M2Y="><span
+                                    class="fab fa-instagram"></span></a></li>
                         </ul>
                     </div>
                 </div>
+                {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        <ul class="flash-messages">
+                            {% for message in messages %}
+                                <li class="flash-message">{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                {% endwith %}
 
                 <!-- Form Column -->
                 <div class="form-column col-lg-7 col-md-12 col-sm-12">
@@ -33,7 +44,7 @@
                         <!--Default Form-->
                         <div class="default-form contact-form">
 
-                            <form method="post" action="sendemail.php" id="">
+                            <form method="post" action="{{ url_for('blog.send_mail') }}" id="">
                                 <div class="row clearfix">
                                     <div class="col-md-6 col-sm-12 form-group">
                                         <input type="text" name="username" placeholder="Full name" required="">

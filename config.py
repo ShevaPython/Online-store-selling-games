@@ -18,6 +18,9 @@ LOGIN_NAME_SUPERUSER = os.getenv("LOGIN_NAME_SUPERUSER")
 PASSWORD_SUPERUSER = os.getenv("PASSWORD_SUPERUSER")
 EMAIL_SUPERUSER = os.getenv("EMAIL_SUPERUSER")
 
-#Платежная система
+# Платежная система
 LIQPAY_PUBLIC = os.getenv("LIQPAY_PUBLIC")
 LIQPAY_PRIVATE = os.getenv("LIQPAY_PRIVATE")
+
+# gmailpassword
+GMAIL_PASSWORD = os.getenv("GMAIL_PASSWORD")

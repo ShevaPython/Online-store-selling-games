@@ -1,13 +1,50 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Callback</title>
+    <title>Статус платежа</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#callbackModal').modal('show');
+        });
+    </script>
+    <script>
+    function redirectToPage(url) {
+        window.location.href = url;
+    }
+</script>
 </head>
 <body>
-    <h1>Data:</h1>
-    <pre>{{ data }}</pre>
+    <!-- Модальное окно -->
+    <div class="modal fade" id="callbackModal" tabindex="-1" role="dialog" aria-labelledby="callbackModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="callbackModalLabel">Статус платежа</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Status: {{ callback_data.status}}</p>
+                    <p>Number order: {{ callback_data.order_id }}</p>
+                     <p>Name: {{callback_data.sender_first_name}}</p>
+                    <p>Surname: {{ callback_data.sender_last_name }}</p>
+                    <p>Agent_commission : {{ callback_data.agent_commission }}</p>
+                    <p>Amount : {{ callback_data.amount_debit }}</p>
 
-    <h1>Signature:</h1>
-    <pre>{{ signature }}</pre>
+
+                    <!-- Другие данные статуса платежа, которые вы хотите отобразить -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="redirectToPage('{{ url_for('blog.index_page') }}')">Закрыть</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
