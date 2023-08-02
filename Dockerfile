@@ -4,6 +4,7 @@ FROM python:3.8-alpine
 RUN apk add --no-cache mariadb-dev build-base git
 
 WORKDIR /app
+COPY .env /app
 COPY . /app
 
 # Установка пакета, который содержит mysql_config

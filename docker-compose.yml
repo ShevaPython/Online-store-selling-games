@@ -11,16 +11,18 @@ services:
       - mysql
     networks:
       - localnet
+    env_file:
+      - .env
 
   mysql:
     image: mysql:latest
     restart: always
     environment:
-      MYSQL_DATABASE: 'Games1'      # Здесь определены переменные окружения для MySQL
-      MYSQL_USER: 'admin'
-      MYSQL_PASSWORD: 'sheva1111'
+     MYSQL_ROOT_PASSWORD: 'sheva1111'
     volumes:
       - mysql_data:/var/lib/mysql
+    ports:
+      - '3307:3306'
     networks:
       - localnet
 

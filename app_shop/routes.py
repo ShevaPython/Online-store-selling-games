@@ -30,13 +30,23 @@ def debug():
     return toolbar.send_static_file('debug_toolbar.js')
 
 
+from random import sample
+
 @bp.route('/')
 def index_page():
     """Главная страница"""
 
     all_games = Game.query.all()
-    random_games = sample(all_games, 6)
+
+    # Проверяем, что список не пустой
+    if not all_games:
+        random_games = []
+    else:
+        # В противном случае, выбираем случайные игры
+        random_games = sample(all_games, 6)
+
     return render_template('shop/index.html', all_games=random_games)
+
 
 
 @bp.route('/shop_games')
