@@ -1,0 +1,32 @@
+version: '3.5'
+
+services:
+  app-python:
+    build: .
+    container_name: app-flask
+    ports:
+      - '8000:8000'
+    restart: unless-stopped
+    depends_on:
+      - mysql
+    networks:
+      - localnet
+
+  mysql:
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'Games1'      # Здесь определены переменные окружения для MySQL
+      MYSQL_USER: 'admin'
+      MYSQL_PASSWORD: 'sheva1111'
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - localnet
+
+volumes:
+  mysql_data:
+networks:
+  localnet:
+    name: localnet
+    driver: bridge

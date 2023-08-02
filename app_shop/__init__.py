@@ -24,12 +24,14 @@ mail = Mail()
 
 def create_app():
     app = Flask(__name__, static_folder='static', template_folder='templates')
-    app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}"
+    app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql://{DB_USER}:{DB_PASSWORD}@mysql:3306/{DB_NAME}"
+
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     # Enable query recording
     app.config['SQLALCHEMY_RECORD_QUERIES'] = True
 
     app.config['SECRET_KEY'] = SECRET_KEY
+    app.config['DEBUG'] = True
 
     # redis
     app.config['REDIS_URL'] = 'redis://localhost:6379/0'
